@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class CharCounterTest{
+public class CharCounterTest {
 
 
     @Test
@@ -16,7 +16,9 @@ public class CharCounterTest{
         InputStream trial = new ByteArrayInputStream("superdupery".getBytes("UTF-8"));
         int initial = cc.countAll(trial);
         int actual = cc.getCount('p');
+        int actual2 = cc.getCount('z');
         assertEquals(2, actual);
+        assertEquals(0, actual2);
     }
 
     @Test
@@ -34,7 +36,7 @@ public class CharCounterTest{
         ICharCounter cc = new CharCounter();
         InputStream ins = new ByteArrayInputStream("berkeleypenn".getBytes("UTF-8"));
         int firstStep = cc.countAll(ins);
-        Map<Integer, Integer> actual = new HashMap<>();;
+        Map<Integer, Integer> actual = new HashMap<>();
         actual = cc.getTable();
         Map<Integer, Integer> expected = new HashMap<>();
         expected.put((int)'e', 4);
@@ -45,6 +47,7 @@ public class CharCounterTest{
         expected.put((int)'l', 1);
         expected.put((int)'y', 1);
         expected.put((int)'p', 1);
+        expected.put(IHuffConstants.ALPH_SIZE, 1);
         assertEquals(expected,actual);
 
 

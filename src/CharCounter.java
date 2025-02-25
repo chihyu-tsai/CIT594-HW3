@@ -1,10 +1,9 @@
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CharCounter implements ICharCounter, IHuffConstants{
+public class CharCounter implements ICharCounter, IHuffConstants {
 
     Map<Integer, Integer> resultMap;
 
@@ -16,7 +15,11 @@ public class CharCounter implements ICharCounter, IHuffConstants{
     public int getCount(int ch) {
         int answer = 0;
         try {
-            answer = resultMap.get(ch);
+            if (resultMap.containsKey(ch)) {
+                answer = resultMap.get(ch);
+            } else {
+                return 0;
+            }
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -28,20 +31,21 @@ public class CharCounter implements ICharCounter, IHuffConstants{
         int nextByte = stream.read();
         int charCount = 0;
         while (nextByte != -1) {
-            charCount += 1;
-            if (!resultMap.containsKey(nextByte)) {
-                set(nextByte, 1);
-            } else {
-                add(nextByte);
-            }
+            add(nextByte);
             nextByte = stream.read();
+            charCount += 1;
         }
+        resultMap.put(PSEUDO_EOF, 1);
         return charCount;
     }
 
     @Override
     public void add(int i) {
-        resultMap.put(i, resultMap.get(i) + 1);;
+        if (resultMap.containsKey(i)) {
+            resultMap.put(i, resultMap.get(i) + 1);
+        } else {
+            set(i,1);
+        }
     }
 
     @Override
